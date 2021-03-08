@@ -264,6 +264,39 @@ do_reset:
   csrr t1, mtvec
 1:bne t0, t1, 1b
 
+  # init nohype base according to mhartid
+  csrr a0, mhartid
+  li a1, 0x0  # base
+  li a2, MEMBASE_UNIT
+2:beqz a0, 3f
+  add a1, a1, a2
+  add a0, a0, -1
+  j 2b
+3:csrr a0, mhartid
+  li t0, 0x20000  # cp
+  sw a0, 0x4(t0)  # cp.hart_sel
+  sw a0, 0x0(t0)  # distinct dsid
+  sw a1, 0xc(t0)  # cp.base_lo
+  sw x0, 0x10(t0) # cp.base_hi
+  # Now nohype base is setup without dep on stack.
+  # The dest region should have the same binary to continue bbl.
+  # Prepare many nops here for syncing
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+
   la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE
 
   csrr a3, vhartid

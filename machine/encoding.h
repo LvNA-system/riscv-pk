@@ -5,7 +5,8 @@
 
 #include "bits.h"
 
-//#define NOHYPE
+#define NOHYPE
+#define MEMBASE_UNIT 0x20000000
 
 #ifdef NOHYPE
 #define vhartid 0x810
