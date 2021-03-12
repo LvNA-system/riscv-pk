@@ -30,14 +30,6 @@ trap_table:
   .globl reset_vector
 reset_vector:
   j do_reset
-  .align 2
-magic_num:
-  .word 0xdeadbeef
-
-  .global external_dtb
-  .align 3
-external_dtb:
-  .fill MAX_EXTERNAL_DTB_SIZE
 
 trap_vector:
   csrrw sp, mscratch, sp
