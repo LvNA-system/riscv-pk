@@ -24,6 +24,17 @@ void* kernel_start;
 void* kernel_end;
 void __am_init_uartlite();
 
+static void dump_misa() {
+  uint32_t misa = read_csr(misa);
+  int i;
+  printm("misa: ");
+  for (i = 0; i < 26; i ++) {
+    if (misa & 0x1) printm("%c ", 'A' + i);
+    misa >>= 1;
+  }
+  printm("\n");
+}
+
 static void mstatus_init()
 {
   // Enable FPU
@@ -170,6 +181,8 @@ void init_first_hart(uintptr_t hartid, uintptr_t dtb)
   printm("bbl loader\r\n");
   printm("SBI console now online\n");
   printm("line %d: hartid = %d, build time: %s %s\n", __LINE__, hartid, __TIME__, __DATE__);
+
+  dump_misa();
 
   hart_init();
   hls_init(0); // this might get called again from parse_config_string
