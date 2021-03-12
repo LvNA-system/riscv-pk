@@ -49,8 +49,10 @@ void boot_other_hart(uintptr_t unused __attribute__((unused)))
     mb();
   } while (!entry);
 
-  long hartid = read_csr(vhartid);
+  //long hartid = read_csr(vhartid);
+  long hartid = read_csr(mhartid);
   if ((1 << hartid) & disabled_hart_mask) {
+    printm("disable hart %d\n", hartid);
     while (1) {
       __asm__ volatile("wfi");
 #ifdef __riscv_div
@@ -71,6 +73,8 @@ void boot_loader(uintptr_t dtb)
 #ifdef PK_PRINT_DEVICE_TREE
   fdt_print(dtb_output());
 #endif
+  long vhartid = read_csr(vhartid);
+  printm("vhartid = 0x%x\n", vhartid);
   mb();
   /* Use optional FDT preloaded external payload if present */
   entry_point = kernel_start ? kernel_start : &_payload_start;

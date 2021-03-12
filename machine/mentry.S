@@ -225,6 +225,7 @@ do_reset:
   li x7, 0
   li x8, 0
   li x9, 0
+  csrr a0, mhartid
 // save a0 and a1; arguments from previous boot loader stage:
 //  li x10, 0
 //  li x11, 0
@@ -258,7 +259,8 @@ do_reset:
 
   la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE
 
-  csrr a3, vhartid
+  #csrr a3, vhartid
+  csrr a3, mhartid
   slli a2, a3, RISCV_PGSHIFT
   add sp, sp, a2
 
