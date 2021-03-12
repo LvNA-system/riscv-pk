@@ -32,6 +32,7 @@ machine_c_srcs = \
   uartlite.c \
   uart.c \
   uart16550.c \
+  uart-beihai.c \
   finisher.c \
   misaligned_ldst.c \
   flush_icache.c \

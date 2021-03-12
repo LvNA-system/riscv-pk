@@ -17,6 +17,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+void __am_uartlite_putchar(char ch);
+int __am_uartlite_getchar();
+
 void __attribute__((noreturn)) bad_trap(uintptr_t* regs, uintptr_t dummy, uintptr_t mepc)
 {
   die("machine mode: unhandlable trap %d @ %p", read_csr(mcause), mepc);
@@ -24,7 +27,7 @@ void __attribute__((noreturn)) bad_trap(uintptr_t* regs, uintptr_t dummy, uintpt
 
 static uintptr_t mcall_console_putchar(uint8_t ch)
 {
-  uartlite_putchar(ch);
+  __am_uartlite_putchar(ch);
   /*
   if (uart) {
     uart_putchar(ch);
@@ -69,7 +72,7 @@ static void send_ipi(uintptr_t recipient, int event)
 
 static uintptr_t mcall_console_getchar()
 {
-  return uartlite_getchar();
+  return __am_uartlite_getchar();
 
   /*
   if (uart) {

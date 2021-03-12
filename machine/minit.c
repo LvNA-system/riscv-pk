@@ -22,6 +22,7 @@ volatile uint32_t* plic_priorities;
 size_t plic_ndevs;
 void* kernel_start;
 void* kernel_end;
+void __am_init_uartlite();
 
 static void mstatus_init()
 {
@@ -173,10 +174,12 @@ void init_first_hart(uintptr_t hartid, uintptr_t dtb)
     dtb_flag = DTB_EXTERNAL_INVALID;
   }
 
+  __am_init_uartlite();
+
   // Confirm console as early as possible
-  query_uartlite(dtb);
+//  query_uartlite(dtb);
   //query_uart(dtb);
-  //query_uart16550(dtb);
+//  query_uart16550(dtb);
   //query_htif(dtb);
   printm("bbl loader\r\n");
   printm("SBI console now online\n");
