@@ -38,7 +38,7 @@ static void dump_misa() {
 static void mstatus_init()
 {
   // Enable FPU
-  if (supports_extension('D') || supports_extension('F'))
+//  if (supports_extension('D') || supports_extension('F'))
     write_csr(mstatus, MSTATUS_FS);
 
   // Enable user/supervisor use of perf counters
@@ -77,8 +77,9 @@ static void delegate_traps()
 
 static void fp_init()
 {
-  if (!supports_extension('D') && !supports_extension('F'))
-    return;
+  //if (!supports_extension('D') && !supports_extension('F')) {
+  //  return;
+  //}
 
   assert(read_csr(mstatus) & MSTATUS_FS);
 
