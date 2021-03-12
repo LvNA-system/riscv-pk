@@ -75,6 +75,18 @@ void boot_loader(uintptr_t dtb)
 #endif
   long vhartid = read_csr(vhartid);
   printm("vhartid = 0x%x\n", vhartid);
+
+  printm("testing LED to test MMIO channel...\n");
+  printm("writing...\n");
+  volatile int *led = (void *)0x52000000l;
+  const int led_output = 0xa;
+  *led = led_output;
+  printm("reading...\n");
+  int led_input = *led;
+  printm("get 0x%x\n", led_input);
+  assert(led_input == led_output);
+  printm("testing LED end\n");
+
   mb();
   /* Use optional FDT preloaded external payload if present */
   entry_point = kernel_start ? kernel_start : &_payload_start;
