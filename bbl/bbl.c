@@ -64,6 +64,17 @@ void boot_other_hart(uintptr_t unused __attribute__((unused)))
   enter_supervisor_mode(entry, hartid, dtb_output());
 }
 
+static void checksum() {
+  // calculate payload checksum
+  uint32_t sum = 0;
+  uint32_t *p = (void *)&_payload_start;
+  while (p < (uint32_t *)&_payload_end) {
+    sum ^= *p;
+    p ++;
+  }
+  printm("checksum = 0x%08x\n", sum);
+}
+
 void boot_loader(uintptr_t dtb)
 {
   filter_dtb(dtb);
@@ -75,6 +86,10 @@ void boot_loader(uintptr_t dtb)
 #endif
   long vhartid = read_csr(vhartid);
   printm("vhartid = 0x%x\n", vhartid);
+
+  printm("payload start = %p, payload end = %p\n", &_payload_start, &_payload_end);
+  int i;
+  for (i = 0; i < 2; i ++) checksum();
 
   printm("testing LED to test MMIO channel...\n");
   printm("writing...\n");
